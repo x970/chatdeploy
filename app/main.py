@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, make_response
 from typing import Dict, Any
 
-from src import Medbot as medbotrefactored
+from .src import Medbot as medbotrefactored
 import uuid
 import time
 import json
