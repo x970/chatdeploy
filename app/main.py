@@ -199,6 +199,3 @@ def initialize_chat():
 
         return Response.send(message, 200)
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
