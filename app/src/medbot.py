@@ -23,7 +23,7 @@ import re
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 import random
-from src import db
+from app.src import db
 from fuzzywuzzy import process
 
 nltk.download('stopwords')
@@ -246,7 +246,7 @@ def listToString(text):
 
 
 # -----------------------------------------------------------------------------
-df = pd.read_csv('./datasets/diseasedata.csv')
+df = pd.read_csv('app/datasets/diseasedata.csv')
 df.isnull().sum().sort_values(ascending=False)
 df['prognosis'].value_counts(normalize=True)
 df.dtypes.unique()
@@ -329,7 +329,7 @@ def splitting(text):
     return [i for item in text for i in item.split()]
 
 
-with open("./datasets/sym.txt", "r") as f:
+with open("app/datasets/sym.txt", "r") as f:
     sym = f.read().split('\n')
 
 
