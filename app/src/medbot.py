@@ -28,6 +28,7 @@ from fuzzywuzzy import process
 
 nltk.download('stopwords')
 nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
 # this function to remove stop words from text
 # stop words: words that have no meaning in english like [the,and ,...]  
