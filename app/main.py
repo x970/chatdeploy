@@ -4,7 +4,7 @@ import os
 
 print('*****************', os.getcwd())
 
-from src import Medbot as medbotrefactored
+from app.src import medbot as medbotrefactored
 import uuid
 import time
 import json

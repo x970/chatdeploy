@@ -23,7 +23,7 @@ import re
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 import random
-from src import db
+from app.src import db
 from fuzzywuzzy import process
 
 nltk.download('stopwords')
