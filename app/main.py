@@ -107,7 +107,7 @@ def initialize_user():
     expire_date = datetime.datetime.now()
     expire_date = expire_date + datetime.timedelta(minutes=10)
 
-    message = medbotrefactored.greet()
+    message = {'message': medbotrefactored.greet()}
 
     response = Response.send(message, 200)
     response.set_cookie('uuid', user_id, expires=expire_date)
@@ -127,7 +127,7 @@ def initialize_chat():
         return initialize_user()
 
     elif stage == 'symptoms':
-        message = medbotrefactored.greet(user_id)
+        message = {'message': medbotrefactored.greet(user_id)}
         update_stage(user_id, 'greeting')
 
         global restart_process
@@ -143,15 +143,15 @@ def initialize_chat():
             update_choice(user_id, choice)
 
             if restart_process:
-                message = medbotrefactored.ask_symptoms()
+                message = {'message': medbotrefactored.ask_symptoms()}
                 update_stage(user_id, 'gender')
                 return Response.send(message, 200)
 
-            message = medbotrefactored.asknames()
+            message = {'message':  medbotrefactored.asknames()}
             return Response.send(message, 200)
 
         if choice == "2":
-            message = {'message': 'This service will be available in the near future'}
+            message = {'message': ['This service will be available in the near future']}
             response = Response.send(message, 200)
             response.set_cookie('uuid', '', expires=0)
 
@@ -166,15 +166,15 @@ def initialize_chat():
         name = reqbody['input']
         update_name(user_id, name)
 
-        message = medbotrefactored.askAges(user_id)
+        message = {'message': medbotrefactored.askAges(user_id)}
         return Response.send(message, 200)
 
     if stage == 'name':
         reqbody = request.get_json(force=True)
         age = reqbody['input']
         update_age(user_id, age)
-        message = medbotrefactored.getAge(user_id, age)
 
+        message = {'message': medbotrefactored.getAge(user_id, age)}
         return Response.send(message, 200)
 
     if stage == 'age':
@@ -183,18 +183,18 @@ def initialize_chat():
 
         if medbotrefactored.getGender(gender) != 0:
             update_gender(user_id, gender)
-            message = medbotrefactored.ask_symptoms()
+            message = {'message': medbotrefactored.ask_symptoms()}
             return Response.send(message, 200)
 
         else:
-            message = medbotrefactored.sorry()
+            message = {'message': medbotrefactored.sorry()}
             return Response.send(message, 200)
 
     if stage == 'gender':
         reqbody = request.get_json(force=True)
         symptoms = reqbody['input']
 
-        message = medbotrefactored.getdisease(symptoms)
+        message = {'message': medbotrefactored.getdisease(symptoms)}
         update_symptoms(user_id, symptoms)
 
         return Response.send(message, 200)
