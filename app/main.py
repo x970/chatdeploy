@@ -1,8 +1,5 @@
 from flask import Flask, jsonify, request, make_response
 from typing import Dict, Any
-import os
-
-print('*****************', os.getcwd())
 
 from app.src import medbot as medbotrefactored
 import uuid
@@ -201,4 +198,3 @@ def initialize_chat():
         update_symptoms(user_id, symptoms)
 
         return Response.send(message, 200)
-
