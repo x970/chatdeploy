@@ -105,9 +105,9 @@ def initialize_user():
     insert_user(user_id)
 
     expire_date = datetime.datetime.now()
-    expire_date = expire_date + datetime.timedelta(minutes=10)
+    expire_date = expire_date + datetime.timedelta(days=10)
 
-    message = {'message': medbotrefactored.greet()}
+    message = {'message':  medbotrefactored.greet()}
 
     response = Response.send(message, 200)
     response.set_cookie('uuid', user_id, expires=expire_date)
@@ -122,17 +122,17 @@ restart_process = False
 def initialize_chat():
     user_id = request.cookies.get('uuid')
     stage = get_stage(user_id)
+    global restart_process
 
     if not stage:
+        restart_process = False
         return initialize_user()
 
     elif stage == 'symptoms':
         message = {'message': medbotrefactored.greet(user_id)}
         update_stage(user_id, 'greeting')
 
-        global restart_process
         restart_process = True
-
         return Response.send(message, 200)
 
     if stage == 'greeting':
