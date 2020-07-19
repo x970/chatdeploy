@@ -1,13 +1,14 @@
 import pyrebase
 
 config = {
-    "apiKey": "AIzaSyA1cwRdlql8imfzRWdJOdtOzNEpW_r2po4",
-    "authDomain": "chatbot-2071e.firebaseapp.com",
-    "databaseURL": "https://chatbot-2071e.firebaseio.com",
-    "projectId": "chatbot-2071e",
-    "storageBucket": "chatbot-2071e.appspot.com",
-    "messagingSenderId": "939444021333",
-    "appId": "1:939444021333:web:07396d4b7326bbffa10cdc"
+    "apiKey": "AIzaSyDqANnC3QfNhGNDl3XY5Ex9rT4EfRFstVY",
+    "authDomain": "project-bb940.firebaseapp.com",
+    "databaseURL": "https://project-bb940.firebaseio.com",
+    "projectId": "project-bb940",
+    "storageBucket": "project-bb940.appspot.com",
+    "messagingSenderId": "1042006402675",
+    "appId": "1:1042006402675:web:edddc41d1d7ea5f9adac06",
+    "measurementId": "G-F0VP8LCC9Z"
 }
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
