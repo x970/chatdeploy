@@ -10,14 +10,14 @@ import pyrebase
 from flask_cors import CORS
 
 config = {
-    "apiKey": "AIzaSyBktUn36xLC9xvfyrLmYAn8-MGZ1MVCjAc",
-    "authDomain": "chatbot-e4397.firebaseapp.com",
-    "databaseURL": "https://chatbot-e4397.firebaseio.com",
-    "projectId": "chatbot-e4397",
-    "storageBucket": "chatbot-e4397.appspot.com",
-    "messagingSenderId": "289196394448",
-    "appId": "1:289196394448:web:1b806d2b6a1c52b5d71bd5",
-    "measurementId": "G-S2X4YZGJZD"
+    "apiKey": "AIzaSyDqANnC3QfNhGNDl3XY5Ex9rT4EfRFstVY",
+    "authDomain": "project-bb940.firebaseapp.com",
+    "databaseURL": "https://project-bb940.firebaseio.com",
+    "projectId": "project-bb940",
+    "storageBucket": "project-bb940.appspot.com",
+    "messagingSenderId": "1042006402675",
+    "appId": "1:1042006402675:web:edddc41d1d7ea5f9adac06",
+    "measurementId": "G-F0VP8LCC9Z"
 }
 
 firebase = pyrebase.initialize_app(config)
