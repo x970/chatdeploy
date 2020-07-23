@@ -92,7 +92,6 @@ class Response:
         response = make_response(json.dumps(response_message))
 
         response.headers.add("Access-Control-Allow-Origin", "https://shemaees.000webhostapp.com/icu/")
-        response.headers.add("Allow-Control-Allow-Origin", "*")
         response.headers.add("Access-Control-Allow-Credentials", "true")
         response.headers['Content-Type'] = 'application/json; charset=utf-8'
         response.headers['mimetype'] = 'application/json'
