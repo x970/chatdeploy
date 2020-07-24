@@ -174,15 +174,17 @@ def initialize_chat():
     if stage == 'name':
         reqbody = request.get_json(force=True)
         age = reqbody['input']
-        update_age(user_id, age)
-
-        message = {'message': medbotrefactored.getAge(user_id, age)}
-        return Response.send(message, 200)
-
+        try:
+            age = str(int(age))
+            update_age(user_id, age)
+            message = {'message': medbotrefactored.getAge(user_id, age)}
+            return Response.send(message, 200)
+        except:
+            message = {'message': 'Invalid Input'}
+            return Response.send(message, 400)
     if stage == 'age':
         reqbody = request.get_json(force=True)
         gender = reqbody['input']
-
         if medbotrefactored.getGender(gender) != 0:
             update_gender(user_id, gender)
             message = {'message': medbotrefactored.ask_symptoms()}
