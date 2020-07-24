@@ -80,7 +80,9 @@ def get_name(uuid):
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app,supports_credentials=True,resources={
+    r"/medbot": {"origins":"https://shemaees.000webhostapp.com"}
+})
 
 
 class Response:
@@ -91,8 +93,8 @@ class Response:
     def send(cls, response_message: Dict[str, Any], status_code: int):
         response = make_response(json.dumps(response_message))
 
-        response.headers.add("Access-Control-Allow-Origin", "https://shemaees.000webhostapp.com/icu/")
-        response.headers.add("Access-Control-Allow-Credentials", "true")
+        #response.headers.add("Access-Control-Allow-Origin", "https://shemaees.000webhostapp.com/icu/")
+        #response.headers.add("Access-Control-Allow-Credentials", "true")
         response.headers['Content-Type'] = 'application/json; charset=utf-8'
         response.headers['mimetype'] = 'application/json'
         response.status_code = status_code
