@@ -149,8 +149,8 @@ def initialize_chat():
                 update_stage(user_id, 'gender')
                 return Response.send(message, 200)
 
-            message = {'message':  medbotrefactored.asknames()}
-            return Response.send(message, 200)
+             message = {'message':  medbotrefactored.asknames()}
+             return Response.send(message, 200)
 
             
         if choice == "2":
