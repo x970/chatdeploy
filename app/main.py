@@ -8,6 +8,7 @@ import json
 import datetime
 import pyrebase
 from flask_cors import CORS
+import re
 
 config = {
     "apiKey": "AIzaSyA1cwRdlql8imfzRWdJOdtOzNEpW_r2po4",
@@ -84,7 +85,6 @@ CORS(app,supports_credentials=True,resources={
     r"/medbot": {"origins":"https://shemaees.000webhostapp.com"}
 })
 
-
 class Response:
     def __init__(self):
         pass
@@ -93,10 +93,11 @@ class Response:
     def send(cls, response_message: Dict[str, Any], status_code: int):
         response = make_response(json.dumps(response_message))
 
-        #response.headers.add("Access-Control-Allow-Origin", "https://shemaees.000webhostapp.com/icu/")
+        #response.headers.add("Access-Control-Allow-Origin", "http://127.0.0.1:5000/medbot")
         #response.headers.add("Access-Control-Allow-Credentials", "true")
         response.headers['Content-Type'] = 'application/json; charset=utf-8'
         response.headers['mimetype'] = 'application/json'
+        #response.headers['Access-Control-Allow-Origin'] = 'http://127.0.0.1:5000/medbot'
         response.status_code = status_code
 
         return response
@@ -107,7 +108,7 @@ def initialize_user():
     insert_user(user_id)
 
     expire_date = datetime.datetime.now()
-    expire_date = expire_date + datetime.timedelta(days=10)
+    expire_date = expire_date + datetime.timedelta(minutes=4)
 
     message = {'message':  medbotrefactored.greet()}
 
@@ -119,7 +120,6 @@ def initialize_user():
 # Globals
 restart_process = False
 
-
 @app.route("/medbot", methods=['POST'])
 def initialize_chat():
     user_id = request.cookies.get('uuid')
@@ -129,13 +129,35 @@ def initialize_chat():
     if not stage:
         restart_process = False
         return initialize_user()
-
     elif stage == 'symptoms':
         message = {'message': medbotrefactored.greet(user_id)}
         update_stage(user_id, 'greeting')
 
         restart_process = True
+
         return Response.send(message, 200)
+    #2 when user refresh page that return this message and current stage
+    if request.get_data() == b'':
+        message = ""
+        if stage == "choice":
+            message = {'message':  ['Please enter you name']}
+            return Response.send(message, 200)
+        elif stage == 'name':
+            message = {'message':  ['Please enter your age']}
+            return Response.send(message, 200)
+        elif stage == 'age':
+            message = {'message':  ['Please enter your gender (male or female)']}
+            return Response.send(message, 200)
+        elif stage == 'gender':
+            message = {'message':  ['Please enter your symptoms']}
+            return Response.send(message, 200)
+        elif stage == 'greeting':
+            # TDB
+            message = {'message': medbotrefactored.greet(user_id)}
+            return Response.send(message, 200)
+        else:
+            message = {'message':  ['Unknown stage']}
+            return Response.send(message, 200)
 
     if stage == 'greeting':
         reqbody = request.get_json(force=True)
@@ -160,31 +182,41 @@ def initialize_chat():
             return response
 
         else:
-            message = medbotrefactored.greet(user_id)
+            message = {'message': ['Please enter valid choice']}
+
             return Response.send(message, 200)
 
     if stage == 'choice':
         reqbody = request.get_json(force=True)
         name = reqbody['input']
-        update_name(user_id, name)
-
-        message = {'message': medbotrefactored.askAges(user_id)}
-        return Response.send(message, 200)
+        if hasNumbers(name): #continue 1 no enter integer
+            message = {'message': ['Please enter valid name']}
+            return Response.send(message, 200)
+        else: #3 when user enter iam then here delet it from message
+            name = name.replace("I am ", "").replace("my name is", "").replace("my name ","").replace("iam ","").replace("i'm ","")
+            update_name(user_id, name)
+            message = {'message': medbotrefactored.askAges(user_id)}
+            return Response.send(message, 200)
 
     if stage == 'name':
         reqbody = request.get_json(force=True)
         age = reqbody['input']
-        try:
-            age = str(int(age))
+
+
+        if hasNumbers(age): #1 continue
+            age = str(int(re.search(r'\d+', age).group()))
             update_age(user_id, age)
             message = {'message': medbotrefactored.getAge(user_id, age)}
             return Response.send(message, 200)
-        except:
-            message = {'message': 'Invalid Input'}
-            return Response.send(message, 400)
+        else:
+
+            message = {'message':['Please enter valid age']}
+            return Response.send(message, 200)
+
     if stage == 'age':
         reqbody = request.get_json(force=True)
         gender = reqbody['input']
+
         if medbotrefactored.getGender(gender) != 0:
             update_gender(user_id, gender)
             message = {'message': medbotrefactored.ask_symptoms()}
@@ -197,8 +229,13 @@ def initialize_chat():
     if stage == 'gender':
         reqbody = request.get_json(force=True)
         symptoms = reqbody['input']
+        res = medbotrefactored.getdisease(symptoms)
+        print(res)
+        if res == "0":
+            message = {'message': ['Please enter valid symptoms']}
+            return Response.send(message, 200)
+        else:
+            message = {'message': res}
+            update_symptoms(user_id, symptoms)
 
-        message = {'message': medbotrefactored.getdisease(symptoms)}
-        update_symptoms(user_id, symptoms)
-
-        return Response.send(message, 200)
+            return Response.send(message, 200)
