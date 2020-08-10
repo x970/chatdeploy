@@ -1,3 +1,5 @@
+
+# import libraries
 import pandas as pd
 # import seaborn as sns
 # import matplotlib.pyplot as plt
@@ -21,15 +23,15 @@ import re
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 import random
-from src import db
+from app.src import db
 from fuzzywuzzy import process
 
 nltk.download('stopwords')
-nltk.download('averaged_perceptron_tagger')
 nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
 # this function to remove stop words from text
-# stop words: words that have no meaning in english like [the,and ,...]
+# stop words: words that have no meaning in english like [the,and ,...]  
 def stemming(text):
     wt = word_tokenize(text)
     ps = PorterStemmer()
@@ -95,7 +97,6 @@ def asknames():
     return messages
 
 
-
 # asknames()
 
 def getName(text):
@@ -109,7 +110,7 @@ def getName(text):
         if (str(tag[i][1]) == 'NN' or str(tag[i][1]) == 'NNP') and str(tag[i][0]) != 'name':
             noun.append(tag[i][0])
 
-    chunkGram = r"""Chunk: {<NN+>*}
+    chunkGram = r"""Chunk: {<NN+>*} 
                     }<VB>{
                     }<DT>{
                     }<IN>{
@@ -120,7 +121,7 @@ def getName(text):
     """
     chunkParser = nltk.RegexpParser(chunkGram)
     chunked = chunkParser.parse(tag)
-    name = [""]
+
     for i in chunked:
         if i != ('name', 'NN', 'VB', 'DT', 'IN', 'VBD', 'JJ'):
             name = i
@@ -240,13 +241,13 @@ class Natural_language_processing:
 NLP = Natural_language_processing()
 
 
-# Function to convert the list to string
+# Function to convert the list to string    
 def listToString(text):
     return ' '.join(text)
 
 
 # -----------------------------------------------------------------------------
-df = pd.read_csv('./datasets/diseasedata.csv')
+df = pd.read_csv('app/datasets/diseasedata.csv')
 df.isnull().sum().sort_values(ascending=False)
 df['prognosis'].value_counts(normalize=True)
 df.dtypes.unique()
@@ -329,7 +330,7 @@ def splitting(text):
     return [i for item in text for i in item.split()]
 
 
-with open("./datasets/sym.txt", "r") as f:
+with open("app/datasets/sym.txt", "r") as f:
     sym = f.read().split('\n')
 
 
@@ -382,14 +383,9 @@ def getdisease(symptoms):
     y_pred_2 = DTC.predict_proba([a])
 
     wiki = str(y_diagnosis[0])
-
-    if y_pred_2.max() * 100 < 30:
-        messages = "0"
-    else:
-
-        messages = [f"i predict you have {y_diagnosis[0]} disease, confidence score of : {y_pred_2.max() * 100}%",
-                    'this is info about your disease :', wikipedia.summary(wiki, sentences=2),
-                    'note : \n Do not depend on this result .. Please see a doctor']
+    messages = [f"i predict you have {y_diagnosis[0]} disease, confidence score of : {y_pred_2.max() * 100}%",
+                'this is info about your disease :', wikipedia.summary(wiki, sentences=2),
+                'note : \n Do not depend on this result .. Please see a doctor']
 
     return messages
 
@@ -397,3 +393,4 @@ def getdisease(symptoms):
 # def note():
 #     messages = ['note : \n Do not depend on this result .. Please see a doctor']
 #     return messages
+
