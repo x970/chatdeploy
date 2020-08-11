@@ -87,9 +87,10 @@ app = Flask(__name__)
 CORS(app,supports_credentials=True,resources={
     r"/medbot": {"origins":"*"}
 })
-CORS(app,supports_credentials=True,resources={
+
+'''CORS'(app,supports_credentials=True,resources={
     r"/logout": {"origins":"*"}
-})
+})'''
 
 class Response:
     def __init__(self):
@@ -125,12 +126,13 @@ def initialize_user():
 # Globals
 restart_process = False
 
-@app.route("/logout", methods=['POST'])
+'''@app.route("/logout", methods=['POST'])
 def Logout_User():
     message = {'message': 'Goodbye'}
     response = Response.send(message, 200)
     response.set_cookie('uuid', '', expires=0)
-    return response
+    return response'''
+
 @app.route("/medbot", methods=['POST'])
 def initialize_chat():
     user_id = request.cookies.get('uuid')
