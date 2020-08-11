@@ -390,7 +390,7 @@ def getdisease(symptoms):
                     'this is info about your disease :', wikipedia.summary(wiki, sentences=2),
                     'note : \n Do not depend on this result .. Please see a doctor']
 
-        return messages
+    return messages
 
 # def note():
 #     messages = ['note : \n Do not depend on this result .. Please see a doctor']
