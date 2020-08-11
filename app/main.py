@@ -100,10 +100,11 @@ class Response:
     def send(cls, response_message: Dict[str, Any], status_code: int):
         response = make_response(json.dumps(response_message))
 
-        #response.headers.add("Access-Control-Allow-Origin", "https://shemaees.000webhostapp.com/icu/")
+        #response.headers.add("Access-Control-Allow-Origin", "http://127.0.0.1:5000/medbot")
         #response.headers.add("Access-Control-Allow-Credentials", "true")
         response.headers['Content-Type'] = 'application/json; charset=utf-8'
         response.headers['mimetype'] = 'application/json'
+        #response.headers['Access-Control-Allow-Origin'] = 'http://127.0.0.1:5000/medbot'
         response.status_code = status_code
 
         return response
@@ -114,7 +115,7 @@ def initialize_user():
     insert_user(user_id)
 
     expire_date = datetime.datetime.now()
-    expire_date = expire_date + datetime.timedelta(days=10)
+    expire_date = expire_date + datetime.timedelta(minutes=4)
 
     message = {'message':  medbotrefactored.greet()}
 
@@ -126,13 +127,12 @@ def initialize_user():
 # Globals
 restart_process = False
 
-'''@app.route("/logout", methods=['POST'])
+@app.route("/logout", methods=['POST'])
 def Logout_User():
     message = {'message': 'Goodbye'}
     response = Response.send(message, 200)
     response.set_cookie('uuid', '', expires=0)
-    return response'''
-
+    return response
 @app.route("/medbot", methods=['POST'])
 def initialize_chat():
     user_id = request.cookies.get('uuid')
@@ -142,7 +142,7 @@ def initialize_chat():
     if not stage:
         restart_process = False
         return initialize_user()
-    elif stage == 'symptoms':
+    elif stage == 'symptoms':  #new
         message = {'message': medbotrefactored.greet(user_id)}
         update_stage(user_id, 'greeting')
 
@@ -178,7 +178,7 @@ def initialize_chat():
 
         if choice == "1":
             update_choice(user_id, choice)
-
+            #when user come back to use medbot
             if restart_process:
                 message = {'message': medbotrefactored.ask_symptoms()}
                 update_stage(user_id, 'gender')
@@ -186,7 +186,7 @@ def initialize_chat():
 
             message = {'message':  medbotrefactored.asknames()}
             return Response.send(message, 200)
-
+        #when select two take user to Book intensive care unit
         if choice == "2":
             message = {'message': ['This service will be available in the near future']}
             response = Response.send(message, 200)
@@ -216,7 +216,7 @@ def initialize_chat():
         age = reqbody['input']
 
 
-        if hasNumbers(age): #1 continue
+        if hasNumbers(age): #1 continue if user enter string not number or int
             age = str(int(re.search(r'\d+', age).group()))
             update_age(user_id, age)
             message = {'message': medbotrefactored.getAge(user_id, age)}
