@@ -31,7 +31,7 @@ nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
 # this function to remove stop words from text
-# stop words: words that have no meaning in english like [the,and ,...]  
+# stop words: words that have no meaning in english like [the,and ,...]
 def stemming(text):
     wt = word_tokenize(text)
     ps = PorterStemmer()
@@ -110,7 +110,7 @@ def getName(text):
         if (str(tag[i][1]) == 'NN' or str(tag[i][1]) == 'NNP') and str(tag[i][0]) != 'name':
             noun.append(tag[i][0])
 
-    chunkGram = r"""Chunk: {<NN+>*} 
+    chunkGram = r"""Chunk: {<NN+>*}
                     }<VB>{
                     }<DT>{
                     }<IN>{
@@ -241,7 +241,7 @@ class Natural_language_processing:
 NLP = Natural_language_processing()
 
 
-# Function to convert the list to string    
+# Function to convert the list to string
 def listToString(text):
     return ' '.join(text)
 
@@ -383,14 +383,15 @@ def getdisease(symptoms):
     y_pred_2 = DTC.predict_proba([a])
 
     wiki = str(y_diagnosis[0])
-    messages = [f"i predict you have {y_diagnosis[0]} disease, confidence score of : {y_pred_2.max() * 100}%",
-                'this is info about your disease :', wikipedia.summary(wiki, sentences=2),
-                'note : \n Do not depend on this result .. Please see a doctor']
+    if y_pred_2.max() * 100 < 30:
+        messages = "0"
+    else:
+        messages = [f"i predict you have {y_diagnosis[0]} disease, confidence score of : {y_pred_2.max() * 100}%",
+                    'this is info about your disease :', wikipedia.summary(wiki, sentences=2),
+                    'note : \n Do not depend on this result .. Please see a doctor']
 
-    return messages
-
-
+        return messages
+        
 # def note():
 #     messages = ['note : \n Do not depend on this result .. Please see a doctor']
 #     return messages
-
