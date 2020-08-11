@@ -243,7 +243,7 @@ def initialize_chat():
         reqbody = request.get_json(force=True)
         symptoms = reqbody['input']
         res = medbotrefactored.getdisease(symptoms)
-        print(res)
+        #print(res)
         if res == "0":
             message = {'message': ['Please enter valid symptoms']}
             return Response.send(message, 200)
