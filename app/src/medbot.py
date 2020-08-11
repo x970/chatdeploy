@@ -383,15 +383,15 @@ def getdisease(symptoms):
     y_pred_2 = DTC.predict_proba([a])
 
     wiki = str(y_diagnosis[0])
-    if y_pred_2.max() * 100 < 30:
+    '''if y_pred_2.max() * 100 < 30:
         messages = "0"
-    else:
+    else:'''
         messages = [f"i predict you have {y_diagnosis[0]} disease, confidence score of : {y_pred_2.max() * 100}%",
                     'this is info about your disease :', wikipedia.summary(wiki, sentences=2),
                     'note : \n Do not depend on this result .. Please see a doctor']
 
         return messages
-        
+
 # def note():
 #     messages = ['note : \n Do not depend on this result .. Please see a doctor']
 #     return messages
