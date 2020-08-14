@@ -104,7 +104,7 @@ class Response:
         #response.headers.add("Access-Control-Allow-Credentials", "true")
         response.headers['Content-Type'] = 'application/json; charset=utf-8'
         response.headers['mimetype'] = 'application/json'
-        #response.headers['Access-Control-Allow-Origin'] = 'http://127.0.0.1:5000/medbot'
+        #response.headers['Access-Control-Allow-Origin'] = '*'
         response.status_code = status_code
 
         return response
@@ -115,7 +115,7 @@ def initialize_user():
     insert_user(user_id)
 
     expire_date = datetime.datetime.now()
-    expire_date = expire_date + datetime.timedelta(minutes=4)
+    expire_date = expire_date + datetime.timedelta(days=15)
 
     message = {'message':  medbotrefactored.greet()}
 
