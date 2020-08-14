@@ -127,12 +127,13 @@ def initialize_user():
 # Globals
 restart_process = False
 
-@app.route("/logout", methods=['POST'])
+'''@app.route("/logout", methods=['POST'])
 def Logout_User():
     message = {'message': 'Goodbye'}
     response = Response.send(message, 200)
     response.set_cookie('uuid', '', expires=0)
-    return response
+    return response'''
+
 @app.route("/medbot", methods=['POST'])
 def initialize_chat():
     user_id = request.cookies.get('uuid')
@@ -188,7 +189,7 @@ def initialize_chat():
             return Response.send(message, 200)
         #when select two take user to Book intensive care unit
         if choice == "2":
-            message = {'message': ['This service will be available in the near future']}
+            message = {'message': ['Your request has been executed']}
             response = Response.send(message, 200)
             response.set_cookie('uuid', '', expires=0)
 
